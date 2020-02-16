@@ -1,5 +1,4 @@
 import csv
-
 import pandas as pd
 
 with open("Mouse Chr lim.txt", "r") as file:
@@ -38,5 +37,6 @@ with open("Mouse Chr lim.txt", "r") as file:
                 # print "gene: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0]
 
         index = index + 1
+        
     df = pd.DataFrame(results)
     print(df.groupby('lignee').count())
