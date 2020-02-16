@@ -1,0 +1,138 @@
+SNP ID (dbSNP Build 142)	Chromosome	Coordinate (GRCm38)	MGI Gene ID	Gene Symbol	Category	Variation Type	Allele Summary (all strains)	129S1/SvImJ	129X1/SvJ	A/J	AKR/J	BALB/cByJ	BTBRT<+>Itpr3<tf>/J	C3H/HeJ	C57BL/6J	CAST/EiJ	DBA/2J	FVB/NJ	KK/HlJ	LG/J	MOLF/EiJ	MSM/Ms	NOD/ShiLtJ	NZW/LacJ	PWD/PhJ	SM/J	WSB/EiJ	
+rs52576441	1	5625232				SNP	C/T													T						C		
+rs32223900	1	5625471				SNP	C/T		C	C					C		T			T						C		
+rs32312439	1	5625611				SNP	C/T		T	T					T		C			C						T		
+rs32347392	1	5625722				SNP	G/T		T	T					T		G			G						T		
+rs31500982	1	5626564				SNP	C/T	C	C	C					C		T											
+rs215385306	1	5626679				SNP	C/G													C						G		
+rs240764114	1	5626796				SNP	G/T													G						T		
+rs253827165	1	5626809				SNP	A/T													T						A		
+rs216946269	1	5627177				SNP	A/G													G						A		
+rs236725264	1	5628512				SNP	A/G													A						G		
+rs250012995	1	5628818				SNP	A/G													A						G		
+rs219234962	1	5628894				SNP	A/G													A						G		
+rs236278320	1	5629904				SNP	G/T													G						T		
+rs262507421	1	5629992				SNP	A/C													A						C		
+rs224361355	1	5630183				SNP	C/T													T						C		
+rs31491453	1	5630227				SNP	G/T		G						G		T											
+rs32051675	1	5630833				SNP	A/T	A		A					A		T			T						A		
+rs32657833	1	5630898				SNP	A/G	G		G					G		A			A						G		
+rs31233387	1	5631641				SNP	A/T			T					T		A			A						T		
+rs31996722	1	5631786				SNP	C/T			T					T		C			C						T		
+rs31620310	1	5631912				SNP	G/T	T		T					T		G			G						T		
+rs32478092	1	5631995				SNP	A/C	C		C					C		A			A						C		
+rs32446693	1	5632323				SNP	A/G	A		A					A		G			G						A		
+rs49281426	1	5632425				SNP	C/T			C												T						
+rs32293988	1	5633970				SNP	G/T	T	T	T					T		G											
+rs31321845	1	5634134				SNP	A/G	G	G	G					G		A			A						G		
+rs32603716	1	5634687				SNP	A/C		C	C					C		A			A						C		
+rs30854087	1	5634767				SNP	C/T		C	C							T			T						C		
+rs31244599	1	5634798				SNP	A/G		G	G							A			A						G		
+rs30996426	1	5635126				SNP	C/T	T	T	T					T		C											
+rs236663728	1	5635299				SNP	G/T													G						T		
+rs243832348	1	5635982				SNP	A/G													G						A		
+rs31350087	1	5636637				SNP	A/G		A	A					A		G											
+rs213189992	1	5637312				SNP	G/T													T						G		
+rs238615867	1	5637393				SNP	G/T													T						G		
+rs257900805	1	5637808				SNP	C/T													C						T		
+rs224320243	1	5638162				SNP	A/G													A						G		
+rs238806186	1	5638633				SNP	C/T													C						T		
+rs252744241	1	5639077				SNP	A/G													G						A		
+rs222923660	1	5639186				SNP	A/G													G						A		
+rs235746265	1	5639378				SNP	A/G													A						G		
+rs254541532	1	5639439				SNP	C/T													T						C		
+rs222515778	1	5639648				SNP	C/T													T						C		
+rs246866354	1	5640107				SNP	A/G													A						G		
+rs31573543	1	5640201				SNP	G/T		G	G							T											
+rs31782215	1	5640222				SNP	A/C		C	C							A			A						C		
+rs32308313	1	5640387				SNP	C/T		C	C							T			T						C		
+rs49555779	1	5640429				SNP	C/T		T	T							C			C						T		
+rs30501109	1	5640446				SNP	A/G		G	G					G		A			A						G		
+rs224047225	1	5640456				SNP	G/T													T						G		
+rs32497816	1	5640517				SNP	C/T		C	C					C		T											
+rs32143664	1	5641061				SNP	A/G		A	A					A		G			G						A		
+rs31711070	1	5641379				SNP	C/T			C					C		T			T						C		
+rs32140280	1	5641533				SNP	C/T	C		C	C	C		C	C	C	T	C	C		C		C	C	C		C	
+rs37908156	1	5641794				SNP	C/T	T		T	T	T		C		C	C	T	T	C	T		T	T		T	T	
+rs31347534	1	5642086				SNP	A/G	G		G	G	G		G	G	G	A	G	G		G		G	G	G		G	
+rs46202569	1	5642191				SNP	A/G			G							A			A						G		
+rs49897107	1	5642229				SNP	A/T			A							T			T						A		
+rs47712043	1	5642391				SNP	A/C										A			A						C		
+rs38120439	1	5642565				SNP	A/T	A			A						T	A	A				A	A			A	
+rs47250427	1	5642566				SNP	C/T										T			T						C		
+rs31573357	1	5642676				SNP	A/G			A					A		G											
+rs217427346	1	5642693				SNP	G/T													T						G		
+rs230163195	1	5642726				SNP	C/G													G						C		
+rs256116652	1	5642909				SNP	C/T													T						C		
+rs221961292	1	5642924				SNP	C/G													C						G		
+rs244045686	1	5643150				SNP	C/T													T						C		
+rs30501107	1	5643221				SNP	C/T	C	C	C	C	C		T	C	T	T	C	C	T	C		C	C	T	C	C	
+rs37780608	1	5643238				SNP	A/C	C		C	C	C		A		A	A	C	C		C		C	C	A		C	
+rs31866488	1	5643389				SNP	A/T	A	A	A	A	A		T	A	T	T	A	A	T	A		A	A	T	A	T	
+rs37739743	1	5644030				SNP	C/T	C		C	C			T		T	T	C	C	T	C		C	C	T	C	C	
+rs37578142	1	5644304				SNP	A/G	A		A	A	A		A		A	A	A	A		A		G	A	A		A	
+rs31702725	1	5644500				SNP	C/T	C	C	C					C		T											
+rs32304110	1	5644552				SNP	G/T	G	G	G					G		T											
+rs36865410	1	5644998				SNP	C/T	C		C	C	C		C		C	C	C	C		C		C	C	C		T	
+rs31519430	1	5645563				SNP	A/T	T	T	T					T		A			A						T		
+rs32558549	1	5645767				SNP	A/G	A	A	A					A		G			G						A		
+rs46569505	1	5645787				SNP	C		C													C						
+rs30657925	1	5645832				SNP	A/G	A	A	A					A		G			G						A		
+rs30986803	1	5645879				SNP	A/G	A	A	A					A		G			G						A		
+rs50088550	1	5645940				SNP	G															G						
+rs32593067	1	5646004				SNP	C/T	T	T	T					T		C											
+rs31609685	1	5646099				SNP	A/G	A	A	A					A		G			G						A		
+rs251818276	1	5646105				SNP	A/G													A						G		
+rs32067916	1	5646133				SNP	C/G	G	G	G					G		C			C						G		
+rs32650868	1	5646289				SNP	C/G	G	G	G							C			C						G		
+rs33062534	1	5646729				SNP	G/T	T	T	T					G		T											
+rs31783266	1	5646743				SNP	C/T	T		T					T		C			C						T		
+rs32285573	1	5646745				SNP	C/T	C		C					C		T			T						C		
+rs108122314	1	5646825				SNP	A/G		A	G							G											
+rs29578574	1	5646830				SNP	A/G/T	G	G	? <conflict>					? <conflict>		? <conflict>											
+rs50372410	1	5646832				SNP	C/T		C	C							C					T						
+rs31854464	1	5646839				SNP	C/T	C		C					C		T			T						C		
+rs49660879	1	5646840				SNP	A/G		G	A							G					A						
+rs46154294	1	5646841				SNP	G			G							G											
+rs108236396	1	5646864				SNP	A/G		G	G												A						
+rs45798773	1	5646868				SNP	C/T		C	C							C					T						
+rs49527861	1	5646890				SNP	A/T		A	A							A					T						
+rs47716063	1	5646913				SNP	A			A							A											
+rs48619368	1	5646916				SNP	A/G		G	A							G											
+rs47456057	1	5646920				SNP	A/G			? <conflict>							G											
+rs49905876	1	5646922				SNP	C/T		T	C							C											
+rs51018168	1	5646932				SNP	A/C		A	A							A					C						
+rs46809298	1	5646936				SNP	A/G			G							G					A						
+rs46091231	1	5646953				SNP	C/T		C	C							C					T						
+rs46285547	1	5646957				SNP	A/C			C							C					A						
+rs108317989	1	5646978				SNP	A										A											
+rs46298739	1	5646984				SNP	A			A							A											
+rs49311862	1	5646990				SNP	A/T		T	T							T					A						
+rs32303555	1	5647112				SNP	A/G	G	G	G					G		A			A						G		
+rs32022955	1	5647131				SNP	A/G	A	A	A					A		G			G						A		
+rs32154264	1	5647280				SNP	C/T	T	T	T					T		C			C						T		
+rs32782261	1	5647337				SNP	A/G	G	G	G					G		A											
+rs30518838	1	5647341				SNP	C/T	C	C	C					C		T			T						C		
+rs221794599	1	5647548				SNP	C/T													C						T		
+rs241992719	1	5647748				SNP	A/G													G						A		
+rs31794264	1	5647930				SNP	C/T	C	C						C		T			T						C		
+rs36915608	1	5648177				SNP	A/G	G		G	G	G		A		A		G	G	A	G		G	G		G	G	
+rs237798418	1	5648436				SNP	C/G													G						C		
+rs265011224	1	5648892				SNP	A/C													A						C		
+rs230712772	1	5648897				SNP	A/T													A						T		
+rs247174769	1	5648902				SNP	C/G													G						C		
+rs263318808	1	5649123				SNP	A/C													A						C		
+rs227875829	1	5649383				SNP	A/G													G						A		
+rs247048211	1	5649417				SNP	C/T													T						C		
+rs217340373	1	5649429				SNP	C/G													C						G		
+rs49031543	1	5649513				SNP	C/T		T	T												C						
+rs46610023	1	5649567				SNP	C/T		C	C												T						
+rs49622011	1	5649581				SNP	A/G			G												A						
+rs223559591	1	5649619				SNP	A/T													A						T		
+rs46751514	1	5649625				SNP	C/T		C	C												T						
+rs47437762	1	5649680				SNP	C/T		C	C												T						
+rs45983779	1	5649711				SNP	A/G		G	G												A						
+rs46445715	1	5649793				SNP	G/T		T	T												G						
+rs250017987	1	5649821				SNP	A/T													T						A		
+rs108937301	1	5649847				SNP	A/G		G	G												A						
+rs47988832	1	5649861				SNP	A/G													A		G				G		
