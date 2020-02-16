@@ -37,6 +37,7 @@ with open("Mouse Chr lim.txt", "r") as file:
                 # print "gene: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0]
 
         index = index + 1
-        
+
+    # Use pandas library to build histogram
     df = pd.DataFrame(results)
     print(df.groupby('lignee').count())
