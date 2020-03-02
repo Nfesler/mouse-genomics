@@ -12,7 +12,7 @@ with open("Mouse Chr lim.txt", "r") as file:
             # CLook for differences
             parse = dict()
             for i in range (8, len(row) - 1):
-                if row[i] <> '' and not row[i].startswith("?"):
+                if row[i] != '' and not row[i].startswith("?"):
                     if row[i] in parse:
                         parse[row[i]].append(headers[i])
                     else:
