@@ -13,12 +13,14 @@ with open("Mouse Chr lim.txt", "r") as file:
     for row in file_reader:
         if index == 0:
             headers = row
-        elif row[0] != LastSNP:
-            # CLook for differences
+        elif row[0] != LastSNP:   # Enlever les SNP écrits 2 fois de suite avec gene ID !=
+                                  # TO DO: Verifier que les lignes sont bien pareil??
+            # Look for differences
             parse = dict()
             Nbrelignee = 0
             for i in range (8, len(row) - 1):
-                if row[i] != '' and not row[i].startswith("?"):
+                if row[i] != '' and not "conflict" in row[i]:  # row[i].startswith("?"):
+                                                               # Parfois ligne avec conflit sans forcément commmencer par un ?
                     Nbrelignee = Nbrelignee + 1
                     if row[i] in parse:
                         parse[row[i]].append(headers[i])
