@@ -3,19 +3,22 @@ import pandas as pd
 
 with open("Mouse Chr lim.txt", "r") as file:
     rst = open("Result Chr lim.txt" , "w")
-    rst.write("\t".join(["ligne", "gene", "allele", "lignee"]))
+    rst.write("\t".join(["ligne", "gene", "allele", "lignee", "Nbre de lignee"]))
     rst.write("\n")
     file_reader = csv.reader(file, delimiter='\t')
     index = 0       # numéro de la ligne
     results =  []
+    min = int(input("Nombre minimum de lignee = "))
     for row in file_reader:
         if index == 0:
             headers = row
         else:
             # CLook for differences
             parse = dict()
+            Nbrelignee = 0
             for i in range (8, len(row) - 1):
                 if row[i] != '' and not row[i].startswith("?"):
+                    Nbrelignee = Nbrelignee + 1
                     if row[i] in parse:
                         parse[row[i]].append(headers[i])
                     else:
@@ -24,7 +27,9 @@ with open("Mouse Chr lim.txt", "r") as file:
                 # parse = dictionnaire des lignées pour chaque allele
                 onlyOnce = True
                 differenciator = ""
-                if len(parse) > 1:          # On élimine les cas où on a qu'un seul type d'allele
+                if len(parse) > 1 and Nbrelignee > min:         # On élimine les cas où on a qu'un seul type d'allele
+                                                                # ou un nombre insuffisant de lignées pour que ce soit
+                                                                # intéressant
                     for k,v in parse.items():
                         if len(v) == 1:
                             if differenciator == "":
@@ -38,12 +43,12 @@ with open("Mouse Chr lim.txt", "r") as file:
 
             if onlyOnce and (differenciator != ""):
                 result = dict()
-                result["gene"] = row[0]
+                result["SNP"] = row[0]
                 result["diff"] = differenciator
                 result["lignee"] = parse[differenciator][0]
                 results.append(result)
-                print (index, "gene: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0])
-                rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0]]))
+                print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
+                rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                 rst.write("\n")
 
         index = index + 1
