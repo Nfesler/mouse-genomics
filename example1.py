@@ -8,11 +8,12 @@ with open("Mouse Chr lim.txt", "r") as file:
     file_reader = csv.reader(file, delimiter='\t')
     index = 0       # numéro de la ligne
     results =  []
+    LastSNP = ""
     min = int(input("Nombre minimum de lignee = "))
     for row in file_reader:
         if index == 0:
             headers = row
-        else:
+        elif row[0] != LastSNP:
             # CLook for differences
             parse = dict()
             Nbrelignee = 0
@@ -50,7 +51,7 @@ with open("Mouse Chr lim.txt", "r") as file:
                 print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
                 rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                 rst.write("\n")
-
+        LastSNP = row[0]
         index = index + 1
 
     # Use pandas library to build histogram
