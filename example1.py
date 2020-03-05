@@ -3,7 +3,7 @@ import pandas as pd
 
 with open("Mouse Chr lim.txt", "r") as file:
     rst = open("Result Chr lim.txt" , "w")
-    rst.write("\t".join(["ligne", "gene", "allele", "lignee", "Nbre de lignee"]))
+    rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
     rst.write("\n")
     file_reader = csv.reader(file, delimiter='\t')
     index = 0       # numéro de la ligne
