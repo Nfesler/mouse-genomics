@@ -9,7 +9,7 @@ with open("Mouse Chr lim.txt", "r") as file:
     index = 0       # numéro de la ligne
     results =  []
     LastSNP = ""
-    min = int(input("Nombre minimum de lignee = "))
+    min = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
     for row in file_reader:
         if index == 0:
             headers = row
