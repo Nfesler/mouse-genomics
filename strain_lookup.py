@@ -25,7 +25,7 @@ counter = Counter(all_strains)
 # Find the maximum occurrence
 occurencies = counter.values()
 max_occurency = max(occurencies)
-#print(max_occurency)
+# print(max_occurency)
 
 # filter all strain with max value
 common_strains_dict = dict(filter(lambda el: el[1] >= max_occurency, counter.items()))
