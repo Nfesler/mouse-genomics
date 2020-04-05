@@ -1,8 +1,8 @@
 import csv
 import pandas as pd
 
-with open("Mouse Chr lim.txt", "r") as file:
-    rst = open("Result Chr lim.txt" , "w")
+with open("C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr 1.txt", "r") as file:
+    rst = open("C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Liste\\Result Chr 1.txt" , "w")
     rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
     rst.write("\n")
     file_reader = csv.reader(file, delimiter='\t')
@@ -60,7 +60,7 @@ with open("Mouse Chr lim.txt", "r") as file:
     df = pd.DataFrame(results)
     dt = (df.groupby('lignee').count())
     print(dt)
-    rst_output = open("Tableau recap chr lim.txt","w")
+    rst_output = open("C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\StrainTab\\Strain_Chr_1.txt","w")
     rst_output.write( f"{dt}")
     rst_output.close()
     rst.close()
