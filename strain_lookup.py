@@ -20,7 +20,7 @@ for file in os.scandir(directory):
 
 # Count strains occurrence
 counter = Counter(all_strains)
-print(counter)
+# print(counter)
 
 # Find the maximum occurrence
 occurencies = counter.values()
@@ -29,6 +29,6 @@ max_occurency = max(occurencies)
 
 # filter all strain with max value
 common_strains_dict = dict(filter(lambda el: el[1] >= max_occurency, counter.items()))
-print(common_strains_dict)
+# print(common_strains_dict)
 
 print(common_strains_dict.keys())
