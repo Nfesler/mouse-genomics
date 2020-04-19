@@ -72,7 +72,7 @@ def analyse(filename, out1, out2):
         rst_output.close()
         rst.close()
 
-for i in range(1):
+for i in range(19):
     index = i + 1
     filename = filename_pattern.format(index)
     out1 = out1_pattern.format(index)
