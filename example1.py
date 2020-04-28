@@ -68,8 +68,11 @@ def analyse(filename, out1, out2):
         df = pd.DataFrame(results)
         dt = (df.groupby('lignee').count())
         print(dt)
+        print("Total de SNP:    ", total)
         rst_output = open(out2,"w")
         rst_output.write( f"{dt}")
+        rst_output.write("\n")
+        rst_output.write("Total de SNPs:" "\t" f"{total}")
         rst_output.close()
         rst.close()
 
