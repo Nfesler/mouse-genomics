@@ -1,9 +1,9 @@
 import csv
 import pandas as pd
 
-filename_pattern = 'A path to the file Mouse Chr {0}.txt'
-out1_pattern = 'A path to result {0}.txt'
-out2_pattern = 'A path to result 2 {0}.txt'
+filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
+out1_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Liste\\result {0}.txt'
+out2_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\StrainTab\\result 2 {0}.txt'
 
 
 def analyse(filename, out1, out2):
@@ -16,6 +16,7 @@ def analyse(filename, out1, out2):
         results =  []
         LastSNP = ""
         min = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
+        total = 0
         for row in file_reader:
             if index == 0:
                 headers = row
@@ -56,9 +57,10 @@ def analyse(filename, out1, out2):
                     result["diff"] = differenciator
                     result["lignee"] = parse[differenciator][0]
                     results.append(result)
-                    print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
+                    # print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
                     rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                     rst.write("\n")
+                    total = total + 1
             LastSNP = row[0]
             index = index + 1
 
