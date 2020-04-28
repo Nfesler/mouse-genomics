@@ -10,6 +10,7 @@ with open("Mouse Chr lim.txt", "r") as file:
     results =  []
     LastSNP = ""
     min = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
+    total = 0
     for row in file_reader:
         if index == 0:
             headers = row
@@ -53,6 +54,7 @@ with open("Mouse Chr lim.txt", "r") as file:
                 print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
                 rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                 rst.write("\n")
+                total = total + 1
         LastSNP = row[0]
         index = index + 1
 
@@ -60,7 +62,10 @@ with open("Mouse Chr lim.txt", "r") as file:
     df = pd.DataFrame(results)
     dt = (df.groupby('lignee').count())
     print(dt)
+    print("Total de SNP:    ", total)
     rst_output = open("Tableau recap chr lim.txt","w")
-    rst_output.write( f"{dt}")
+    rst_output.write(f"{dt}")
+    rst_output.write("\n")
+    rst_output.write("total de SNP" "\t" f"{total}" )
     rst_output.close()
     rst.close()
