@@ -5,8 +5,9 @@ filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomic
 out1_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Liste\\result {0}.txt'
 out2_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\StrainTab\\result 2 {0}.txt'
 
+full_results = pd.DataFrame()
 
-def analyse(filename, out1, out2):
+def analyse(filename, out1, out2, columnName):
     with open(filename, "r") as file:
         rst = open(out1 , "w")
         rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
@@ -14,7 +15,7 @@ def analyse(filename, out1, out2):
         file_reader = csv.reader(file, delimiter='\t')
         index = 0       # numéro de la ligne
         results =  []
-        LastSNP = ""
+        LastSNP  = ""
         min = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
         total = 0
         for row in file_reader:
@@ -65,13 +66,19 @@ def analyse(filename, out1, out2):
             index = index + 1
 
         # Use pandas library to build histogram
+        global full_results
         df = pd.DataFrame(results)
-        dt = (df.groupby('lignee').count())
+        dt = pd.DataFrame(df.groupby('lignee').count())
+        dt = dt.drop('diff', axis=1)
+        dt.columns = [columnName]
         print(dt)
+        if full_results.empty:
+            full_results = dt
+        else:
+            full_results = pd.merge(left=full_results, right=dt, on='lignee', how='outer')
         print("Total de SNP:    ", total)
         rst_output = open(out2,"w")
-        rst_output.write( f"{dt}")
-        rst_output.write("\n")
+        rst_output.write(f"{dt}\n")
         rst_output.write("Total de SNPs:" "\t" f"{total}")
         rst_output.close()
         rst.close()
@@ -81,4 +88,8 @@ for i in range(19):
     filename = filename_pattern.format(index)
     out1 = out1_pattern.format(index)
     out2 = out2_pattern.format(index)
-    analyse(filename, out1, out2)
+    print("chromosome", index)
+    analyse(filename, out1, out2, columnName='chr' + str(index))
+
+print(full_results)
+full_results.to_csv('full_results.csv')
