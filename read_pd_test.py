@@ -23,4 +23,4 @@ for i in range (19):
     analyse(filename, columnName='chr'+str(index))
 
 print(full_results)
-# full_results.to_csv('full_results.csv')
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\full_results.csv')
