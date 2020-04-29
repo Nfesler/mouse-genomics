@@ -1,6 +1,8 @@
 import csv
 import pandas as pd
 
+limited_results = pd.DataFrame()
+
 with open("Mouse Chr lim.txt", "r") as file:
     rst = open("Result Chr lim.txt" , "w")
     rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
@@ -60,8 +62,14 @@ with open("Mouse Chr lim.txt", "r") as file:
 
     # Use pandas library to build histogram
     df = pd.DataFrame(results)
-    dt = (df.groupby('lignee').count())
+    dt = pd.DataFrame(df.groupby('lignee').count())
+    dt = dt.drop('diff', axis = 1)
+    dt.columns = ['chr']
     print(dt)
+    if limited_results.empty:
+        limited_results = dt
+    else:
+        limited_results = pd.merge(left=limited_results, right=ft, on='lignee', how='outer')
     print("Total de SNP:    ", total)
     rst_output = open("Tableau recap chr lim.txt","w")
     rst_output.write(f"{dt}")
