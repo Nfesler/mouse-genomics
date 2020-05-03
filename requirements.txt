@@ -6,12 +6,16 @@ chardet==3.0.4
 docutils==0.15.2
 idna==2.9
 jmespath==0.9.5
+joblib==0.14.1
 numpy==1.18.2
 pandas==1.0.3
 python-dateutil==2.8.1
 pytz==2019.3
 requests==2.23.0
 s3transfer==0.3.3
+scikit-learn==0.22.2.post1
+scipy==1.4.1
 six==1.14.0
+sklearn==0.0
 smart-open==1.11.1
 urllib3==1.25.9

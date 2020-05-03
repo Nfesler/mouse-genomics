@@ -21,6 +21,7 @@ with open("Mouse Chr lim.txt", "r") as file:
             # Look for differences
             parse = dict()
             Nbrelignee = 0
+
             for i in range (8, len(row) - 1):
                 if row[i] != '' and not "conflict" in row[i]:  # row[i].startswith("?"):
                                                                # Parfois ligne avec conflit sans forcément commmencer par un ?
