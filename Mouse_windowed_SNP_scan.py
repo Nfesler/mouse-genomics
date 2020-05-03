@@ -1,95 +1,143 @@
 import csv
+import sys
 import pandas as pd
+from sklearn.cluster import DBSCAN
+import numpy as np
 
 filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-out1_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Liste\\result {0}.txt'
-out2_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\StrainTab\\result 2 {0}.txt'
+out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.txt'
 
 full_results = pd.DataFrame()
 
-def analyse(filename, out1, out2, columnName):
-    with open(filename, "r") as file:
-        rst = open(out1 , "w")
-        rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
-        rst.write("\n")
-        file_reader = csv.reader(file, delimiter='\t')
-        index = 0       # numéro de la ligne
-        results =  []
-        LastSNP  = ""
-        min = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
+WINDOW_SIZE = 3
+
+MAXIMUM_DISTANCE = 1000000
+
+strain_data = np.zeros(WINDOW_SIZE, dtype = 'object')
+
+SNP_pos = np.zeros(WINDOW_SIZE, dtype = 'object')
+
+
+
+
+
+def analyse(filename, out, columnName):
+
+    def simple_comparator(x,y):
+        # Comparaison des SNP de 2 lignée un par rapport à l'autre
+        if x =='' or y == '' :
+            # empty SNP could be anything
+            return 0
+        elif x == y :
+            # Si 2 SNP sont identiques
+            return 0
+        else :
+            return MAXIMUM_DISTANCE
+
+
+    def strain_comparator(x,y):
+        # comparaison de l'ensemble de la fenêtre
+        i, j = int(x[0]), int(y[0])
+        distance = 0
+        sdt_i = stacked_strain_data[:,i]
+        sdt_j = stacked_strain_data[:,j]
+
+        if (sdt_i == '').all() or (sdt_j == '').all():
+            # Enlever si les 2 lignée sont vides (deja fait lors de simple_validator)
+            distance = MAXIMUM_DISTANCE
+        else :
+            for k in range(WINDOW_SIZE):
+                distance = min(distance + simple_comparator(stacked_strain_data[k][i], stacked_strain_data[k][j]), MAXIMUM_DISTANCE)
+
+        return distance
+
+
+    def simple_validator(data):
+        search_conflict = np.core.defchararray.find(data, 'conflict') != -1
+            # si conflict dans une valeur alors valeur = -1 donc valeur = False
+        if search_conflict.any():
+            # Si présence d'un False dans le tableau
+            return False
+        elif (data == '').all():
+            # Si tout les SNP sont vides
+            return False
+        else:
+            return True
+
+
+    def build_dbscan_data(st_data):
+        dbscan_data = []
+        for i in range(len(st_data[0])):
+            if simple_validator(st_data[:,i]):
+                dbscan_data = dbscan_data + [[i]]
+        return dbscan_data
+
+
+    with open(filename, 'r') as file:
+        rst = open(out, 'w')
+        file_reader = csv.reader(file, delimiter = '\t')
+        index = 0
+        lastSNP = ''
         total = 0
+        results = pd.DataFrame(columns = ['Line', 'SNP', 'Strain', 'n_samples'])
+        global full_results
+
         for row in file_reader:
             if index == 0:
                 headers = row
-            elif row[0] != LastSNP:   # Enlever les SNP écrits 2 fois de suite avec gene ID !=
-                                      # TO DO: Verifier que les lignes sont bien pareil??
-                # Look for differences
-                parse = dict()
-                Nbrelignee = 0
-                for i in range (8, len(row) - 1):
-                    if row[i] != '' and not "conflict" in row[i]:  # row[i].startswith("?"):
-                                                                   # Parfois ligne avec conflit sans forcément commmencer par un ?
-                        Nbrelignee = Nbrelignee + 1
-                        if row[i] in parse:
-                            parse[row[i]].append(headers[i])
-                        else:
-                            parse[row[i]] = [ headers[i] ]
-                    # Check if there is a unique element - une lignée pour un allele donné
-                    # parse = dictionnaire des lignées pour chaque allele
-                    onlyOnce = True
-                    differenciator = ""
-                    if len(parse) > 1 and Nbrelignee > min:         # On élimine les cas où on a qu'un seul type d'allele
-                                                                    # ou un nombre insuffisant de lignées pour que ce soit
-                                                                    # intéressant
-                        for k,v in parse.items():
-                            if len(v) == 1:
-                                if differenciator == "":
-                                    differenciator = k
-                                else:
-                                    # La deuxième fois qu'on rencontre un allele avec une seule
-                                    # lignée, differenciator <> "" donc on positionne le flag onlyOnce à False
-                                    # car cela veut dire qu'on a plusieurs alleles avec une seule lignée
-                                    onlyOnce = False
-                                    break
+                index = index + 1
+            elif row[0] != lastSNP:
+                # Enlever les SNP écrits 2 fois de suite avec gene ID !=
+                line_index = (index - 1) % WINDOW_SIZE
+                # Reste de la division de index par windows_size
+                strain_data[line_index] = np.array((row[8:len(row) - 1])) # la dernière colonne n'a pas de valeur
+                # Sur le tableau strain_data, la ligne line_index est remplacée par la ligne correspondante
+                SNP_pos[line_index] = row[0]
+                # Enregistrer le SNP
 
-                if onlyOnce and (differenciator != ""):
-                    result = dict()
-                    result["SNP"] = row[0]
-                    result["diff"] = differenciator
-                    result["lignee"] = parse[differenciator][0]
-                    results.append(result)
-                    # print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
-                    rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
-                    rst.write("\n")
-                    total = total + 1
-            LastSNP = row[0]
-            index = index + 1
+                if index > (WINDOW_SIZE - 1) : # Eviter les 2 première lignes
+                    stacked_strain_data = np.stack(strain_data) # creer tableau a 2D a partir de tableau de ligne
+                    # Start calculation:
+                    dbscan_data = build_dbscan_data(stacked_strain_data)
+                    if len(dbscan_data) > 0:
+                        dbscan_result = DBSCAN(metric = strain_comparator, eps = 5, min_samples = 2, algorithm = 'brute').fit(dbscan_data)
+                        # Assembler les strain en groupe identiques selon la technique de strain_comparator
+                        # Groupe 0; 1; 2; ... et -1 si seul
+                        labels = dbscan_result.labels_
+                        n_unique = np.where(labels < 0)
+                        # Retrouver les pattern unique qui ont une valeur de -1
 
-        # Use pandas library to build histogram
-        global full_results
-        df = pd.DataFrame(results)
-        dt = pd.DataFrame(df.groupby('lignee').count())
-        dt = dt.drop('diff', axis=1)
-        dt.columns = [columnName]
+                        if(len(n_unique[0]) == 1):
+                            data_index = n_unique[0][0]
+                            strain_index = dbscan_data[data_index][0]
+                            results = results.append({'Line': index - 1, 'SNP': SNP_pos[(index) % WINDOW_SIZE], 'Strain': headers[strain_index + 8], 'n_samples': len(labels)}, ignore_index = True)
+                            total = total + 1
+
+                index = index + 1
+                print(index, end='\r')
+
+            lastSNP = row[0]
+
+        print('\n')
+        print(results)
+        rst.write(str(results))
+        dt = pd.DataFrame(results.groupby('Strain').count()[['SNP']])
         print(dt)
-        if full_results.empty:
+        print('Total de SNP:    ', total)
+        dt.columns = [columnName]
+        if full_results.empty :
             full_results = dt
-        else:
-            full_results = pd.merge(left=full_results, right=dt, on='lignee', how='outer')
-        print("Total de SNP:    ", total)
-        rst_output = open(out2,"w")
-        rst_output.write(f"{dt}\n")
-        rst_output.write("Total de SNPs:" "\t" f"{total}")
-        rst_output.close()
-        rst.close()
+        else :
+            full_results = pd.merge(left = full_results, right = dt, on = 'Strain', how = 'outer')
+    rst.close()
+
 
 for i in range(19):
     index = i + 1
     filename = filename_pattern.format(index)
-    out1 = out1_pattern.format(index)
-    out2 = out2_pattern.format(index)
+    out = out_pattern.format(index)
     print("chromosome", index)
-    analyse(filename, out1, out2, columnName='chr' + str(index))
+    analyse(filename, out, columnName = 'chr' + str(index))
 
-print(full_results)
-full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\full_results.csv')
+# print(full_results)
+# full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv')
