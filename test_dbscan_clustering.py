@@ -16,6 +16,7 @@ with open("Mouse Chr lim.txt", "r") as file:
     for row in file_reader:
         if index == 0:
             headers = row
+            index = index + 1
         elif row[0] != LastSNP:   # Enlever les SNP écrits 2 fois de suite avec gene ID !=
                                   # TO DO: Verifier que les lignes sont bien pareil??
             # Look for differences
@@ -58,8 +59,8 @@ with open("Mouse Chr lim.txt", "r") as file:
                 rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                 rst.write("\n")
                 total = total + 1
+            index = index + 1
         LastSNP = row[0]
-        index = index + 1
 
     # Use pandas library to build histogram
     df = pd.DataFrame(results)

@@ -2,15 +2,15 @@ import csv
 import pandas as pd
 
 filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-out1_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Liste\\result {0}.txt'
-out2_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\StrainTab\\result 2 {0}.txt'
+out1_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\Liste\\result Chr{0}.txt'
+out2_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\StrainTab\\result 2 Chr{0}.txt'
 
 full_results = pd.DataFrame()
 
 def analyse(filename, out1, out2, columnName):
     with open(filename, "r") as file:
         rst = open(out1 , "w")
-        rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
+        rst.write("\t".join(["index", "SNP", "allele", "lignee", "Nbre de lignee"]))
         rst.write("\n")
         file_reader = csv.reader(file, delimiter='\t')
         index = 0       # numéro de la ligne
@@ -21,6 +21,7 @@ def analyse(filename, out1, out2, columnName):
         for row in file_reader:
             if index == 0:
                 headers = row
+                index = index + 1
             elif row[0] != LastSNP:   # Enlever les SNP écrits 2 fois de suite avec gene ID !=
                                       # TO DO: Verifier que les lignes sont bien pareil??
                 # Look for differences
@@ -62,8 +63,8 @@ def analyse(filename, out1, out2, columnName):
                     rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
                     rst.write("\n")
                     total = total + 1
+                index = index + 1
             LastSNP = row[0]
-            index = index + 1
 
         # Use pandas library to build histogram
         global full_results
@@ -72,11 +73,11 @@ def analyse(filename, out1, out2, columnName):
         dt = dt.drop('diff', axis=1)
         dt.columns = [columnName]
         print(dt)
+        print("Total de SNP:    ", total)
         if full_results.empty:
             full_results = dt
         else:
             full_results = pd.merge(left=full_results, right=dt, on='lignee', how='outer')
-        print("Total de SNP:    ", total)
         rst_output = open(out2,"w")
         rst_output.write(f"{dt}\n")
         rst_output.write("Total de SNPs:" "\t" f"{total}")
@@ -92,4 +93,4 @@ for i in range(19):
     analyse(filename, out1, out2, columnName='chr' + str(index))
 
 print(full_results)
-full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\full_results.csv')
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\full_results_simple.csv')
