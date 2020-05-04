@@ -5,8 +5,12 @@ from sklearn.cluster import DBSCAN
 import numpy as np
 from progress.bar import ShadyBar
 
+
+
 filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.csv'
+out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.txt'
+
+
 
 full_results = pd.DataFrame()
 
@@ -23,7 +27,6 @@ SNP_pos = np.zeros(WINDOW_SIZE, dtype = 'object')
 
 
 
-
 def analyse(filename, out, nb_chr):
 
     def line_count(filename):
@@ -32,6 +35,7 @@ def analyse(filename, out, nb_chr):
             for i, l in enumerate(file_reader):
                 pass
             return (i + 1)
+
 
     def simple_comparator(x,y):
         # Comparaison des SNP de 2 lignée un par rapport à l'autre
@@ -83,16 +87,18 @@ def analyse(filename, out, nb_chr):
         return dbscan_data
 
 
+
     with open(filename, 'r') as file:
+
         file_reader = csv.reader(file, delimiter = '\t')
         total_lines = line_count(filename)
         index = 0
         lastSNP = ''
         total = 0
-        results = pd.DataFrame(columns = ['Line', 'SNP', 'Strain', 'n_samples'])
+        results = []
         global full_results
+        scanned_line = 0
         bar = ShadyBar(nb_chr, max=total_lines / 1000, suffix='%(percent)d%%')
-
 
         for row in file_reader:
             if index == 0:
@@ -122,40 +128,42 @@ def analyse(filename, out, nb_chr):
                         if(len(n_unique[0]) == 1):
                             data_index = n_unique[0][0]
                             strain_index = dbscan_data[data_index][0]
-                            results = results.append({'Line': index - 1, 'SNP': SNP_pos[(index) % WINDOW_SIZE], 'Strain': headers[strain_index + 8], 'n_samples': len(labels)}, ignore_index = True)
+                            result = dict()
+                            result['line'] = index - 1
+                            result['SNP'] = SNP_pos[(index) % WINDOW_SIZE]
+                            result['strain'] = headers[strain_index + 8]
+                            result['n_samples'] = len(labels)
+                            results.append(result)
+
                             total = total + 1
-
-
-                if index % 1000 == 0:
-                    bar.next()
-                    # progress = round((index / total_lines) * 100, 2)
-                    # print(progress, '% ', end='\r')
 
                 index = index + 1
 
             lastSNP = row[0]
 
+            scanned_line = scanned_line + 1
+            if scanned_line % 1000 == 0:
+                bar.next()
+
+
         bar.finish()
 
-        print('\n')
-        print(results)
-        rst.to_csv(out)
-        dt = pd.DataFrame(results.groupby('Strain').count()[['SNP']])
+        df = pd.DataFrame(results)
+        df.to_csv(out)
+        dt = pd.DataFrame(df.groupby('strain').count()[['SNP']])
+        dt.columns = [nb_chr]
         print(dt)
         print('Total de SNP:    ', total)
-        dt.columns = [nb_chr]
         if full_results.empty :
             full_results = dt
         else :
-            full_results = pd.merge(left = full_results, right = dt, on = 'Strain', how = 'outer')
-
+            full_results = pd.merge(left = full_results, right = dt, on = 'strain', how = 'outer')
 
 
 for i in range(19):
     index = i + 1
     filename = filename_pattern.format(index)
     out = out_pattern.format(index)
-    # print("chromosome", index)
     analyse(filename, out, nb_chr = 'chr' + str(index))
 
 print(full_results)
