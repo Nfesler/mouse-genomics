@@ -3,13 +3,16 @@ import sys
 import pandas as pd
 from sklearn.cluster import DBSCAN
 import numpy as np
+from progress.bar import ShadyBar
 
 filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.txt'
+out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.csv'
 
 full_results = pd.DataFrame()
 
 WINDOW_SIZE = 3
+
+MIN_SAMPLES = 3
 
 MAXIMUM_DISTANCE = 1000000
 
@@ -21,7 +24,14 @@ SNP_pos = np.zeros(WINDOW_SIZE, dtype = 'object')
 
 
 
-def analyse(filename, out, columnName):
+def analyse(filename, out, nb_chr):
+
+    def line_count(filename):
+        with open (filename) as file:
+            file_reader = csv.reader(file)
+            for i, l in enumerate(file_reader):
+                pass
+            return (i + 1)
 
     def simple_comparator(x,y):
         # Comparaison des SNP de 2 lignée un par rapport à l'autre
@@ -74,13 +84,15 @@ def analyse(filename, out, columnName):
 
 
     with open(filename, 'r') as file:
-        rst = open(out, 'w')
         file_reader = csv.reader(file, delimiter = '\t')
+        total_lines = line_count(filename)
         index = 0
         lastSNP = ''
         total = 0
         results = pd.DataFrame(columns = ['Line', 'SNP', 'Strain', 'n_samples'])
         global full_results
+        bar = ShadyBar(nb_chr, max=total_lines / 1000, suffix='%(percent)d%%')
+
 
         for row in file_reader:
             if index == 0:
@@ -99,7 +111,7 @@ def analyse(filename, out, columnName):
                     stacked_strain_data = np.stack(strain_data) # creer tableau a 2D a partir de tableau de ligne
                     # Start calculation:
                     dbscan_data = build_dbscan_data(stacked_strain_data)
-                    if len(dbscan_data) > 0:
+                    if len(dbscan_data) >= MIN_SAMPLES:
                         dbscan_result = DBSCAN(metric = strain_comparator, eps = 5, min_samples = 2, algorithm = 'brute').fit(dbscan_data)
                         # Assembler les strain en groupe identiques selon la technique de strain_comparator
                         # Groupe 0; 1; 2; ... et -1 si seul
@@ -113,31 +125,38 @@ def analyse(filename, out, columnName):
                             results = results.append({'Line': index - 1, 'SNP': SNP_pos[(index) % WINDOW_SIZE], 'Strain': headers[strain_index + 8], 'n_samples': len(labels)}, ignore_index = True)
                             total = total + 1
 
+
+                if index % 1000 == 0:
+                    bar.next()
+                    # progress = round((index / total_lines) * 100, 2)
+                    # print(progress, '% ', end='\r')
+
                 index = index + 1
-                print(index, end='\r')
 
             lastSNP = row[0]
 
+        bar.finish()
+
         print('\n')
         print(results)
-        rst.write(str(results))
+        rst.to_csv(out)
         dt = pd.DataFrame(results.groupby('Strain').count()[['SNP']])
         print(dt)
         print('Total de SNP:    ', total)
-        dt.columns = [columnName]
+        dt.columns = [nb_chr]
         if full_results.empty :
             full_results = dt
         else :
             full_results = pd.merge(left = full_results, right = dt, on = 'Strain', how = 'outer')
-    rst.close()
+
 
 
 for i in range(19):
     index = i + 1
     filename = filename_pattern.format(index)
     out = out_pattern.format(index)
-    print("chromosome", index)
-    analyse(filename, out, columnName = 'chr' + str(index))
+    # print("chromosome", index)
+    analyse(filename, out, nb_chr = 'chr' + str(index))
 
-# print(full_results)
-# full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv')
+print(full_results)
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv')
