@@ -63,15 +63,13 @@ def build_dbscan_data(st_data):
 
 
 with open("Mouse Chr lim.txt", "r") as file:
-    rst = open("Result Chr lim.txt" , "w")
-    rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
-    rst.write("\n")
+    rst = open("Result Windowed Chr lim.txt" , "w")
     file_reader = csv.reader(file, delimiter='\t')
     index = 0       # numéro de la ligne
     LastSNP = ""
     min_strain = 5  # Choix du nombre de lignée minimum données pour considérer le résultat intéressant
     total = 0
-    results = pd.DataFrame(columns=['line', 'snp', 'strain'])
+    results = pd.DataFrame(columns=['line', 'snp', 'strain', 'n_samples'])
 
     for row in file_reader:
         if index == 0:
@@ -84,9 +82,9 @@ with open("Mouse Chr lim.txt", "r") as file:
             strain_data[line_index] = np.array((row[8:len(row) - 1])) # La dernière colonne n'a pas une valeur
             snp_pos[line_index] = row[0]
 
-            #print('\n')
-            #print(index)
-            print(strain_data)
+            # print('\n')
+            # print(index)
+            # print(strain_data)
 
 
             if index > (WINDOW_SIZE - 1) :
@@ -99,78 +97,28 @@ with open("Mouse Chr lim.txt", "r") as file:
 
                 n_unique = np.where(labels < 0)
 
-                #print(labels)
+                # print(labels)
+                # print(n_unique)
                 if (len(n_unique[0]) == 1):
                     data_index = n_unique[0][0]
+                    # print(data_index)
                     strain_index = dbscan_data[data_index][0]
-                    print(index - 1)
-                    print(snp_pos)
-                    print(snp_pos[(index) % WINDOW_SIZE])
-                    print(headers[strain_index + 8])
-                    results = results.append({'line': index -1, 'snp': snp_pos[(index) % WINDOW_SIZE], 'strain':headers[strain_index + 8]}, ignore_index=True)
+                    # print(strain_index)
+                    # print(index - 1)
+                    # print(snp_pos)
+                    # print(snp_pos[(index) % WINDOW_SIZE])
+                    # print(headers[strain_index + 8])
+                    # print(len(labels))
+                    results = results.append({'line': index -1, 'snp': snp_pos[(index) % WINDOW_SIZE], 'strain':headers[strain_index + 8], 'n_samples': len(labels)}, ignore_index = True)
+                    total = total + 1
 
-            #
-            #
-            # # Look for differences
-            # parse = dict()
-            # Nbrelignee = 0
-            # for i in range (8, len(row) - 1):
-            #     if row[i] != '' and not "conflict" in row[i]:  # row[i].startswith("?"):
-            #                                                    # Parfois ligne avec conflit sans forcément commmencer par un ?
-            #         Nbrelignee = Nbrelignee + 1
-            #         if row[i] in parse:
-            #             parse[row[i]].append(headers[i])
-            #         else:
-            #             parse[row[i]] = [ headers[i] ]
-            #     # Check if there is a unique element - une lignée pour un allele donné
-            #     # parse = dictionnaire des lignées pour chaque allele
-            #     onlyOnce = True
-            #     differenciator = ""
-            #     if len(parse) > 1 and Nbrelignee > min:         # On élimine les cas où on a qu'un seul type d'allele
-            #                                                     # ou un nombre insuffisant de lignées pour que ce soit
-            #                                                     # intéressant
-            #         for k,v in parse.items():
-            #             if len(v) == 1:
-            #                 if differenciator == "":
-            #                     differenciator = k
-            #                 else:
-            #                     # La deuxième fois qu'on rencontre un allele avec une seule
-            #                     # lignée, differenciator <> "" donc on positionne le flag onlyOnce à False
-            #                     # car cela veut dire qu'on a plusieurs alleles avec une seule lignée
-            #                     onlyOnce = False
-            #                     break
-            #
-            # if onlyOnce and (differenciator != ""):
-            #     result = dict()
-            #     result["SNP"] = row[0]
-            #     result["diff"] = differenciator
-            #     result["lignee"] = parse[differenciator][0]
-            #     results.append(result)
-            #     print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
-            #     rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
-            #     rst.write("\n")
-            #     total = total + 1
             index = index + 1
+
         LastSNP = row[0]
 
-
-    # Use pandas library to build histogram
-    # df = pd.DataFrame(results)
-    # dt = pd.DataFrame(df.groupby('lignee').count())
-    # dt = dt.drop('diff', axis = 1)
-    # dt.columns = ['chr']
-    # print(dt)
-    # if limited_results.empty:
-    #     limited_results = dt
-    # else:
-    #     limited_results = pd.merge(left=limited_results, right=ft, on='lignee', how='outer')
-    # print("Total de SNP:    ", total)
-    # rst_output = open("Tableau recap chr lim.txt","w")
-    # rst_output.write(f"{dt}")
-    # rst_output.write("\n")
-    # rst_output.write("total de SNP" "\t" f"{total}" )
-    # rst_output.close()
-    rst.close()
     print(results)
+    rst.write(str(results))
+    rst.close()
     dt = pd.DataFrame(results.groupby('strain').count()[['snp']])
     print(dt)
+    print('Total:', total)
