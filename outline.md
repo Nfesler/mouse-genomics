@@ -1,6 +1,6 @@
 # Introduction
 
-Pourquoi In Silico 
+Pourquoi In Silico
 
 # Les concepts principaux
 
@@ -11,7 +11,7 @@ Pourquoi In Silico
 
 # Le Dataset
 
-Expliquer les données que tu manipules 
+Expliquer les données que tu manipules
 
 # Ce qu'on cherche
 
@@ -28,8 +28,3 @@ Parler un peu de dbscan (?)
 # Commentaires sur les résultats - Conclusions
 
 # Pour aller plus loin
-
-* jdhhss
-* jdhjdhfs
-
-dhhdfjhsjhcdsds cjhdfkhdshfdjh

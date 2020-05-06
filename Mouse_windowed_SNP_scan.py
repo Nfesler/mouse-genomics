@@ -148,10 +148,15 @@ def analyse(filename, out, nb_chr):
 
         bar.finish()
 
+        pd.set_option('precision', 0)
+        all_strains = pd.DataFrame(headers[8:len(row)-1])
+        all_strains.columns = ['strain']
         df = pd.DataFrame(results)
         df.to_csv(out)
         dt = pd.DataFrame(df.groupby('strain').count()[['SNP']])
         dt.columns = [nb_chr]
+        dt = pd.merge(left = all_strains, right = dt, on = 'strain', how = 'outer')
+        dt.fillna(0)
         print(dt)
         print('Total de SNP:    ', total)
         if full_results.empty :
@@ -167,4 +172,4 @@ for i in range(19):
     analyse(filename, out, nb_chr = 'chr' + str(index))
 
 print(full_results)
-full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv')
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv', decimal = ',')

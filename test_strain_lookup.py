@@ -11,6 +11,7 @@ def extract_strain(file_name):
         file_reader = csv.reader(input_file, delimiter = '\t')
         row = next(file_reader)
         strains = row[8:len(row) - 1]
+        print(strains)
         return strains
 
 all_strains = []
@@ -31,4 +32,7 @@ max_occurency = max(occurencies)
 common_strains_dict = dict(filter(lambda el: el[1] >= max_occurency, counter.items()))
 # print(common_strains_dict)
 
-print(common_strains_dict.keys())
+# print(counter)
+# print(common_strains_dict.keys())
+# n_strain = len(counter.keys())
+# print(n_strain)

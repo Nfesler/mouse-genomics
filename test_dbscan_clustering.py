@@ -4,9 +4,7 @@ import pandas as pd
 limited_results = pd.DataFrame()
 
 with open("Mouse Chr lim.txt", "r") as file:
-    rst = open("Result Chr lim.txt" , "w")
-    rst.write("\t".join(["ligne", "SNP", "allele", "lignee", "Nbre de lignee"]))
-    rst.write("\n")
+
     file_reader = csv.reader(file, delimiter='\t')
     index = 0       # numéro de la ligne
     results =  []
@@ -21,12 +19,12 @@ with open("Mouse Chr lim.txt", "r") as file:
                                   # TO DO: Verifier que les lignes sont bien pareil??
             # Look for differences
             parse = dict()
-            Nbrelignee = 0
+            n_samples = 0
 
             for i in range (8, len(row) - 1):
                 if row[i] != '' and not "conflict" in row[i]:  # row[i].startswith("?"):
                                                                # Parfois ligne avec conflit sans forcément commmencer par un ?
-                    Nbrelignee = Nbrelignee + 1
+                    n_samples = n_samples + 1
                     if row[i] in parse:
                         parse[row[i]].append(headers[i])
                     else:
@@ -35,7 +33,7 @@ with open("Mouse Chr lim.txt", "r") as file:
                 # parse = dictionnaire des lignées pour chaque allele
                 onlyOnce = True
                 differenciator = ""
-                if len(parse) > 1 and Nbrelignee > min:         # On élimine les cas où on a qu'un seul type d'allele
+                if len(parse) > 1 and n_samples > min:         # On élimine les cas où on a qu'un seul type d'allele
                                                                 # ou un nombre insuffisant de lignées pour que ce soit
                                                                 # intéressant
                     for k,v in parse.items():
@@ -51,31 +49,35 @@ with open("Mouse Chr lim.txt", "r") as file:
 
             if onlyOnce and (differenciator != ""):
                 result = dict()
-                result["SNP"] = row[0]
-                result["diff"] = differenciator
-                result["lignee"] = parse[differenciator][0]
+                result['line'] = index
+                result['SNP'] = row[0]
+                result['strain'] = parse[differenciator][0]
+                result['n_samples'] = n_samples
                 results.append(result)
-                print (index, "SNP: ", row[0], " Differenciator: ", differenciator, " lignee: ", parse[differenciator][0], "Nombre de lignee: ", Nbrelignee)
-                rst.write("\t".join([str(index), row[0], differenciator, parse[differenciator][0], str(Nbrelignee)]))
-                rst.write("\n")
+
                 total = total + 1
             index = index + 1
         LastSNP = row[0]
 
+    pd.set_option('precision', 0)
+    all_strains = pd.DataFrame(headers[8:len(row)-1])
+    all_strains.columns = ['strain']
+    print(all_strains)
     # Use pandas library to build histogram
     df = pd.DataFrame(results)
-    dt = pd.DataFrame(df.groupby('lignee').count())
-    dt = dt.drop('diff', axis = 1)
-    dt.columns = ['chr']
+    df.to_csv("Result Chr lim.txt")
+    dt = pd.DataFrame(df.groupby('strain').count()[['SNP']])
+    dt.columns = ["Chr lim"]
     print(dt)
-    if limited_results.empty:
-        limited_results = dt
-    else:
-        limited_results = pd.merge(left=limited_results, right=ft, on='lignee', how='outer')
     print("Total de SNP:    ", total)
-    rst_output = open("Tableau recap chr lim.txt","w")
-    rst_output.write(f"{dt}")
-    rst_output.write("\n")
-    rst_output.write("total de SNP" "\t" f"{total}" )
-    rst_output.close()
-    rst.close()
+    dt = pd.merge(left = all_strains, right = dt, on='strain', how='outer')
+    dt = dt.fillna(0)
+    # dt = dt.reset_index(drop = True)
+    print(dt)
+    # if limited_results.empty:
+    #     limited_results = dt
+    # else:
+    #     limited_results = pd.merge(left=limited_results, right=ft, on='lignee', how='outer')
+    print("Total de SNP:    ", total)
+    pd.set_option('precision', 0)
+    dt.to_csv('Tableau recapchr lim.csv', decimal = ",")
