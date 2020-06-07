@@ -6,9 +6,8 @@ import pandas as pd
 from progress.bar import ShadyBar
 
 
-
-# filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-# out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\Liste\\result Chr{0}.csv'
+filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
+out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\Liste\\result Chr{0}.csv'
 
 
 
@@ -66,6 +65,7 @@ def analyse(filename, nb_chr):
 
         bar.finish()
 
+        snps_by_strain['_MAX_'] = index
         # Use pandas library to build histogram
         pd.set_option('precision', 0)
         all_strains = pd.DataFrame(headers[8:len(row)-1])
@@ -91,5 +91,6 @@ for i in range(19):
     filename = filename_pattern.format(index)
     analyse(filename, nb_chr ='chr' + str(index))
 
+full_results = full_results.sort_index()
 print(full_results)
-full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Simple\\full_results_simple.csv', decimal = ',')
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\snps_by_strain.csv', decimal = ',')
