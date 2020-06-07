@@ -84,14 +84,15 @@ with open("Mouse Chr lim.txt", "r") as file:
 
             # print('\n')
             # print(index)
-            # print(strain_data)
+            print(strain_data)
 
 
             if index > (WINDOW_SIZE - 1) :
                 stacked_strain_data = np.stack(strain_data)
+                print(stacked_strain_data)
                 # Start calculation
                 dbscan_data = build_dbscan_data(stacked_strain_data)
-                #print(dbscan_data)
+                print(dbscan_data)
                 dbscan_result = DBSCAN(metric=strain_comparator,eps=5,min_samples=2,algorithm='brute').fit(dbscan_data)
                 labels = dbscan_result.labels_
 
@@ -116,9 +117,9 @@ with open("Mouse Chr lim.txt", "r") as file:
 
         LastSNP = row[0]
 
-    print(results)
+    # print(results)
     rst.write(str(results))
     rst.close()
     dt = pd.DataFrame(results.groupby('strain').count()[['snp']])
-    print(dt)
-    print('Total:', total)
+    # print(dt)
+    # print('Total:', total)

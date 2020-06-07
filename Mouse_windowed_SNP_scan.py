@@ -156,7 +156,7 @@ def analyse(filename, out, nb_chr):
         dt = pd.DataFrame(df.groupby('strain').count()[['SNP']])
         dt.columns = [nb_chr]
         dt = pd.merge(left = all_strains, right = dt, on = 'strain', how = 'outer')
-        dt.fillna(0)
+        dt = dt.fillna(0)
         print(dt)
         print('Total de SNP:    ', total)
         if full_results.empty :
