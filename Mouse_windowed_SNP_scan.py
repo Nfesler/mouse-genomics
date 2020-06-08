@@ -7,16 +7,11 @@ from progress.bar import ShadyBar
 
 
 
-filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
-out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\Liste\\result windowed chr {0}.csv'
-
-
-
-full_results = pd.DataFrame()
-
 WINDOW_SIZE = 3
 
 MIN_SAMPLES = 3
+
+full_results = pd.DataFrame()
 
 MAXIMUM_DISTANCE = 1000000
 
@@ -24,6 +19,10 @@ strain_data = np.zeros(WINDOW_SIZE, dtype = 'object')
 
 SNP_pos = np.zeros(WINDOW_SIZE, dtype = 'object')
 
+
+
+filename_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Génome souris\\Mouse Chr {0}.txt'
+out_pattern = 'C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\%d\\Liste\\result windowed chr {0}.csv' % WINDOW_SIZE
 
 
 
@@ -172,4 +171,4 @@ for i in range(19):
     analyse(filename, out, nb_chr = 'chr' + str(index))
 
 print(full_results)
-full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\full_results_windowed.csv', decimal = ',')
+full_results.to_csv('C:\\Users\\nicol\\OneDrive\\Documents\\GitHub\\mouse-genomics\\Result\\Windowed\\%d\\full_results_windowed.csv', decimal = ',') % WINDOW_SIZE
